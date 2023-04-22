@@ -14,6 +14,7 @@ public class TableObject : UdonSharpBehaviour
 
     // Max numbers of tiles used will be 17, for now.
     private int tilesUsed = 0;
+    private int tilesShot = 0;
     // For now the limit of ships that can be placed will be 5.
     // This 2D array will represent the tiles of the table, and each tile will point to the gameobject that it is occupied by.
     // usedTiles[z][x] ==> [number][letter (in number form)]
@@ -109,6 +110,16 @@ public class TableObject : UdonSharpBehaviour
             }
         }
         return res;
+    }
+
+    public void shootShip(int number, char letter)
+    {
+        int letterInt = charToInt(letter);
+        if (objectTiles[number - 1][letterInt] != null)
+        {
+            objectTiles[number - 1][letterInt] = null;
+            tilesShot++;
+        }
     }
 
 }

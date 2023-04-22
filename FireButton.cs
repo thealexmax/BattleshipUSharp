@@ -11,10 +11,13 @@ public class FireButton : UdonSharpBehaviour
     public GameObject lettersBtnParent;
     public GameObject numbersBtnParent;
 
+    // This should be the enemy's table.
+    // as of now, for testing, it's going to be my own table.
     private TableObject tableScript;
 
-    [SerializeField] private char letter;
-    [SerializeField] private int number;
+    // It will default to A1 if the user doesn't imput anything.
+    private char letter = 'A';
+    private int number = 1;
 
     void Start()
     {
@@ -24,8 +27,9 @@ public class FireButton : UdonSharpBehaviour
     private void Interact() 
     {
         updateCoords();
-        Debug.Log(letter);
-        //fireAtCoord(letter, number);
+        Debug.Log("Target Letter is: " + letter);
+        Debug.Log("Target Number is: " + number);
+        fireAtCoord(letter, number);
     }
 
     private void updateCoords()
@@ -40,14 +44,25 @@ public class FireButton : UdonSharpBehaviour
                 break;
             }
         }
+
+        foreach (Transform numberChild in numbersBtnParent.transform) 
+        {
+            SelectButton btn = numberChild.GetComponent<SelectButton>();
+            if (btn.isSelected())
+            {
+                number = int.Parse(numberChild.name);
+                break;
+            }
+        }
     }
 
     private void fireAtCoord(char letter, int number)
     {
-        bool v = tableScript.isTileOccupied(number, letter);
-        if (v) 
+        bool tileStatus = tableScript.isTileOccupied(number, letter);
+        if (tileStatus) 
         {
-            Debug.Log("Tile is Busy");
+            Debug.Log("Tile is Busy, Shooting tile");
+            tableScript.shootShip(number, letter);
         }
     }
 }
